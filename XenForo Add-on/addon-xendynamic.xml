@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="xendynamic" title="XenDynamic" version_string="0.1.0" version_id="0" url="http://www.rcbdesigns.net" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <code_events/>
+  <code_event_listeners/>
+  <cron/>
+  <email_templates/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases/>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="XenDynamic" version_id="0" version_string="0.1.0"><![CDATA[{xen:raw $html}]]></template>
+    <template title="XenDynamic.css" version_id="0" version_string="0.1.0"><![CDATA[/*
+ * Theme Name: XenDynamic
+ * Theme URI: http://www.rcbdesigns.net
+ * Description: The Dynamic XenForo v1.0.4 Theme For WordPress 
+ * Version: 0.1.0
+ * Author: Rich Berrill
+ * Author URI: http://www.rcbdesigns.net
+ * Tags: xenforo
+ * File: XenDynamic.css
+ *
+ * All changes that you wish to apply to all styles should be placed here on the master
+ * style , if you need to adjust something for a specific style on forum add them to 
+ * the XenDynamicEXTRA.css file for that specific style.  This will allow those styles 
+ * to be retained if you upgrade the plugin.
+ */
+
+.avatar-20 {
+background: {xen:property primaryLightish};
+width: 60px !important;
+height: 60px !important;
+float: right;
+margin: 10px !important;
+padding: 5px;
+border: 1px solid {xen:property primaryDarker};
+border-radius: 5px;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-khtml-border-radius: 5px;
+
+}
+
+.frontPageMain .nodeList .forumNodeInfo, .frontPageMain {
+background: {xen:property primaryLightish};
+color: {xen:property primaryLightest};
+border-color: {xen:property primaryLighterStill};
+font-size: 1.1em;
+}
+
+.frontPageMain p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.XenDynamic .titleBar {
+    margin-bottom: 0px;
+}
+
+/* -------------------------------------------------------------- 
+   
+   Basic WordPress Blog Styles   
+     
+-------------------------------------------------------------- */   
+
+
+/* Images
+-------------------------------------------------------------- */
+
+.entry-content img {
+	margin: 0 0 1.5em 0;
+}
+.alignleft,
+img.alignleft {
+	display: inline;
+	float: left;
+  margin-right: 1.5em;
+}
+.alignright,
+img.alignright {
+	display: inline;
+	float: right;
+  margin-left: 1.5em;
+}
+.aligncenter,
+img.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.wp-caption {
+	text-align: center;
+	margin-bottom: 1.5em;
+}
+.wp-caption img {
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+}
+.wp-caption p.wp-caption-text {
+	margin: 0;
+}
+.wp-smiley { 
+	max-height: 1em;
+	margin:0 !important;
+}
+.gallery dl {
+	margin: 0;
+}
+.gallery-caption {
+	margin:-1.5em 0 0 0;
+}
+
+
+/* Pullquotes
+-------------------------------------------------------------- */
+
+blockquote {
+    font-style: italic;
+    font-size: .9em;
+margin-left: 20px;
+margin-right: 0px;
+width: 75%;
+}
+
+.XenDynamicNode p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.XenDynamicNode li .content {
+    margin-top: 14px;
+}
+
+h3#comments-title {
+   border-bottom: 1px solid {xen:property primaryLighterStill};
+}
+
+.featuredImage {
+    float:left;
+    margin: 10px 10px 10px 0;
+}
+
+.XenDynamicNode strong {
+    font-weight: bold;
+}
+
+.XenDynamicNode em {
+    font-style: italic;
+}
+]]></template>
+    <template title="XenDynamicEXTRA.css" version_id="0" version_string="0.1.0"><![CDATA[/*
+ * Theme Name: XenDynamic
+ * Theme URI: http://www.rcbdesigns.net
+ * Description: The Dynamic XenForo v1.0.4 Theme For WordPress 
+ * Version: 0.1.0
+ * Author: Rich Berrill
+ * Author URI: http://www.rcbdesigns.net
+ * Tags: xenforo
+ * File: XenDynamicEXTRA.css
+ *
+ * Place changes here that need to be applied to specific styles
+ * /]]></template>
+  </templates>
+</addon>
