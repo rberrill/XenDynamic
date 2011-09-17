@@ -94,7 +94,6 @@ function displayXFTemplate() {
 //    echo $breadCrumb;
     addScript(".breadBoxTop", "html", $breadCrumb);
     addScript(".breadBoxBottom", "html", $breadCrumb);
-    addScript(".tabLinks", "html","<ul class='secondaryContent blockLinksList'><li><a href='forums/-/mark-read?date=1316264858'>Mark All Forums Read</a></li><li><a href='search/?type=post'>Search Forums</a></li><li><a href='watched/threads'>Watched Threads</a></li></ul>");
     global $templateParts;
     $templateParts['middle'] = str_replace("<!-- main template -->", '<div class="mainContainer XenDynamicMC">
             <div class="mainContent">
