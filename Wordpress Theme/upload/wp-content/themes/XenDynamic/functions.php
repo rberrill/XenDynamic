@@ -3,7 +3,7 @@
  * Theme Name: XenDynamic
  * Theme URI: http://www.rcbdesigns.net
  * Description: The Dynamic XenForo v1.0.4 Theme For WordPress 
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Rich Berrill
  * Author URI: http://www.rcbdesigns.net
  * Tags: xenforo
@@ -104,7 +104,6 @@ add_action('wp_footer', 'xd_footer');
 
 //******************************************************************************
 // Register the sidebar so that it can be dynamically rendered.  
-// RCBD TODO: Need to adjust this to handle widgets that have no title
 //******************************************************************************
 
 
@@ -121,4 +120,12 @@ if (function_exists("add_theme_support")) {
     add_theme_support('post-thumbnails');
     add_image_size('home-page-large', 300, 300, true);
     add_image_size('home-page-small', 100, 100, true);
+}
+
+if ( function_exists( 'register_nav_menus' ) ) {
+    register_nav_menus(
+    array(
+      'secondary_menu' => 'Secondary Menu',
+    )
+  );
 }

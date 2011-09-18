@@ -4,7 +4,7 @@
  * Theme Name: XenDynamic
  * Theme URI: http://www.rcbdesigns.net
  * Description: The Dynamic XenForo v1.0.4 Theme For WordPress 
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Rich Berrill
  * Author URI: http://www.rcbdesigns.net
  * Tags: xenforo
@@ -24,7 +24,7 @@ if (!is_admin()) {
     $fileDir = dirname(__FILE__) . "/{$XenDynamic_indexFile}";
 //    $fileDir = ABSPATH . getThemeOption("xenforo_path");
 //	$fileDir = dirname(__FILE__) . "/../../../.." . getThemeOption("xenforo_path");
-	if (!class_exists("XenForo_Autoloader")) {
+    if (!class_exists("XenForo_Autoloader")) {
         require($fileDir . '/library/XenForo/Autoloader.php');
         XenForo_Autoloader::getInstance()->setupAutoloader($fileDir . '/library');
         XenForo_Application::initialize($fileDir . '/library', $fileDir);
@@ -36,7 +36,7 @@ if (!is_admin()) {
     $XenDynamic_fc = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
     $xenforoOutput = $XenDynamic_fc->runXenDynamic(ob_get_clean());
     global $templateParts;
-    $templateParts = getTemplateParts($xenforoOutput,getThemeOption("xenforo_path"));
+    $templateParts = getTemplateParts($xenforoOutput, getThemeOption("xenforo_path"));
 }
 
 //******************************************************************************
@@ -46,7 +46,7 @@ if (!is_admin()) {
 // RCBD TODO: It's ugly and I'm going to try to find a better way to do it.
 //******************************************************************************
 
-function getTemplateParts($buffer,$fileDir) {
+function getTemplateParts($buffer, $fileDir) {
     $uri = explode("/", $_SERVER['REQUEST_URI']);
     if (sizeof($uri) < 3) {
         $uri[1] = "home";
@@ -58,7 +58,12 @@ function getTemplateParts($buffer,$fileDir) {
                                                                                 $("div#contentMover").css("display","block");
                                                                                 $("div.sidebar").prependTo("aside");
                                                                                 $("div.sidebar").css("display","block");
-                                                                                $("ul.publicTabs li.' . $slug . '").addClass("selected");
+                                                                                if ($("ul.publicTabs li.' . $slug . '").length>0) {
+                                                                                    $("ul.publicTabs li.' . $slug . '").addClass("selected");
+                                                                                }
+                                                                                else {
+                                                                                    $("ul.publicTabs li.home").addClass("selected");
+                                                                                }
                                                                                 if($("div#footer_credits a").html() == "Aurora theme by Akrion.") {
                                                                                     $("ul.publicTabs li.' . $slug . '").removeClass("PopupClosed");
                                                                                     $("ul.publicTabs li.' . $slug . ' a").addClass("navDivLink");
@@ -94,7 +99,17 @@ function displayXFTemplate() {
 //    echo $breadCrumb;
     addScript(".breadBoxTop", "html", $breadCrumb);
     addScript(".breadBoxBottom", "html", $breadCrumb);
-    addScript(".tabLinks", "html","<ul class='secondaryContent blockLinksList'><li><a href='forums/-/mark-read?date=1316264858'>Mark All Forums Read</a></li><li><a href='search/?type=post'>Search Forums</a></li><li><a href='watched/threads'>Watched Threads</a></li></ul>");
+    $args = array(
+        "container" => false,
+        "theme_location" => "secondary_menu",
+        "echo" => false,
+        "menu_class" => "secondaryContent blockLinksList",
+    );
+    $menu = wp_nav_menu($args);
+    $menu = ereg_replace("/\n\r|\r\n|\n|\r/", "", $menu);
+    $menu = preg_replace("/\t/", "", $menu);
+    $menu = str_replace("\"", "'", $menu);
+    addScript(".tabLinks", "html", $menu);
     global $templateParts;
     $templateParts['middle'] = str_replace("<!-- main template -->", '<div class="mainContainer XenDynamicMC">
             <div class="mainContent">
