@@ -14,9 +14,8 @@
  */
 
 class XFIntegration {
-    
+
     private $localLoaded = false;
-    
     private $forumPath = "/community";
 
     public function initialize($inputPath) {
@@ -37,33 +36,24 @@ class XFIntegration {
             }
         }
     }
-    
+
     public function isLocalLoaded() {
         return $this->localLoaded;
     }
-    
+
     public function getTemplate() {
         ob_start();
         $controller = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
         return $controller->runXenDynamic(ob_get_clean());
     }
 
-}
-
-//******************************************************************************
-// This function takes the raw buffer from Xenforo and breaks it into the header
-// and the rest of the file it also does some jquery replacements for elements
-// that need to be changed on all wordpress templates.  
-// RCBD TODO: It's ugly and I'm going to try to find a better way to do it.
-//******************************************************************************
-
-function getTemplateParts($buffer, $fileDir) {
-    $uri = explode("/", $_SERVER['REQUEST_URI']);
-    if (sizeof($uri) < 3) {
-        $uri[1] = "home";
-    }
-    $slug = str_replace("-", "", $uri[1]);
-    $buffer = str_replace("</body>", '<script type="text/javascript"> 
+    public function getTemplateParts($buffer) {
+        $uri = explode("/", $_SERVER['REQUEST_URI']);
+        if (sizeof($uri) < 3) {
+            $uri[1] = "home";
+        }
+        $slug = str_replace("-", "", $uri[1]);
+        $buffer = str_replace("</body>", '<script type="text/javascript"> 
 										<!--
                                                                                 $("div#contentMover").prependTo("div.mainContent");
                                                                                 $("div#contentMover").css("display","block");
@@ -86,47 +76,41 @@ function getTemplateParts($buffer, $fileDir) {
 									</script>
                                                                         <!-- end of middle -->
 									</body>', $buffer);
-//    $buffer = str_replace(get_bloginfo("wpurl") . "/", "", $buffer);
-    $buffer = preg_replace("/<title>(.*?)<\/title>/i", "", $buffer);
-//    $buffer = preg_replace("/_bH = \"(.*?)\"/i", "_bH = \"" . get_bloginfo("wpurl") . $fileDir . "/\"", $buffer);
-//    $buffer = preg_replace("/<base href=\"(.*?)\" \/>/i", "<base href=\"" . get_bloginfo("wpurl") . $fileDir . "/\" />", $buffer);
-    $buffer = str_replace('form,public', 'form,public,events,news_feed,login_bar,node_category,node_forum,node_list,XenDynamic,XenDynamicEXTRA', $buffer);
-    $buffer = str_replace('<form action="index.php?search/search" method="post"', '<form action="/" method="get"', $buffer);
-    $buffer = str_replace('name="keywords"', 'name="s"', $buffer);
-    $headFinishPos = strpos($buffer, "</head>");
-    $middleFinishPos = strpos($buffer, "</body>");
-    $headText = substr($buffer, 0, $headFinishPos);
-    $middleText = substr($buffer, $headFinishPos + 7, $middleFinishPos - $headFinishPos - 7);
-    return array("head" => $headText, "middle" => $middleText);
-}
+        $buffer = preg_replace("/<title>(.*?)<\/title>/i", "", $buffer);
+        $buffer = preg_replace("/_bH = \"(.*?)\"/i", "_bH = \"" . get_bloginfo("wpurl") . $this->forumPath . "/\"", $buffer);
+        $buffer = preg_replace("/<base href=\"(.*?)\" \/>/i", "<base href=\"" . get_bloginfo("wpurl") . $this->forumPath . "/\" />", $buffer);
+        $buffer = str_replace('form,public', 'form,public,events,news_feed,login_bar,node_category,node_forum,node_list,XenDynamic,XenDynamicEXTRA', $buffer);
+        $buffer = str_replace('<form action="index.php?search/search" method="post"', '<form action="/" method="get"', $buffer);
+        $buffer = str_replace('name="keywords"', 'name="s"', $buffer);
+        $headFinishPos = strpos($buffer, "</head>");
+        $middleFinishPos = strpos($buffer, "</body>");
+        $headText = substr($buffer, 0, $headFinishPos);
+        $middleText = substr($buffer, $headFinishPos + 7, $middleFinishPos - $headFinishPos - 7);
+        return array("head" => $headText, "middle" => $middleText);
+    }
 
-//******************************************************************************
-// This is called from the Wordpress templates and sends it the main portion of
-// the page that's been rendered.
-//******************************************************************************
-
-function displayXFTemplate() {
-    $breadCrumb = buildBreadCrumbs();
-//    echo $breadCrumb;
-    addScript(".breadBoxTop", "html", $breadCrumb);
-    addScript(".breadBoxBottom", "html", $breadCrumb);
-    $args = array(
-        "container" => false,
-        "theme_location" => "secondary_menu",
-        "echo" => false,
-        "menu_class" => "secondaryContent blockLinksList",
-    );
-    $menu = wp_nav_menu($args);
-    $menu = ereg_replace("/\n\r|\r\n|\n|\r/", "", $menu);
-    $menu = preg_replace("/\t/", "", $menu);
-    $menu = str_replace("\"", "'", $menu);
-    addScript(".tabLinks", "html", $menu);
-    global $templateParts;
-    $templateParts['middle'] = str_replace("<!-- main template -->", '<div class="mainContainer XenDynamicMC">
+    public function displayXFTemplate($template) {
+        $breadCrumb = buildBreadCrumbs();
+        addScript(".breadBoxTop", "html", $breadCrumb);
+        addScript(".breadBoxBottom", "html", $breadCrumb);
+        $args = array(
+            "container" => false,
+            "theme_location" => "secondary_menu",
+            "echo" => false,
+            "menu_class" => "secondaryContent blockLinksList",
+        );
+        $menu = wp_nav_menu($args);
+        $menu = ereg_replace("/\n\r|\r\n|\n|\r/", "", $menu);
+        $menu = preg_replace("/\t/", "", $menu);
+        $menu = str_replace("\"", "'", $menu);
+        addScript(".tabLinks", "html", $menu);
+        $template['middle'] = str_replace("<!-- main template -->", '<div class="mainContainer XenDynamicMC">
             <div class="mainContent">
             </div>
         </div>
         <aside>
-        </aside>', $templateParts['middle']);
-    echo $templateParts['middle'];
+        </aside>', $template['middle']);
+        return $template['middle'];
+    }
+
 }

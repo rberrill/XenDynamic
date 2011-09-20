@@ -27,6 +27,7 @@ get_header();
 <?php get_sidebar(); ?>
 
 <?php
-displayXFTemplate();
+global $XF;
+echo $XF->displayXFTemplate();
 get_footer();
 ?>
