@@ -17,6 +17,17 @@ require_once("includes/theme_options.php");
 require_once("includes/xf_integration.php");
 require_once("includes/breadcrumb.php");
 
+if(!is_admin()) {
+    global $XF;
+    $XF = new XFIntegration();
+    $XF->initialize(getThemeOption("xenforo_path"));
+
+    global $completeTemplate;
+    $completeTemplate = $XF->getTemplate();
+    global $templateParts;
+    $templateParts = $XF->getTemplateParts($completeTemplate);
+}
+
 //******************************************************************************
 // Function to insert a jQuery modification script, these are used to edit the
 // already rendered template.

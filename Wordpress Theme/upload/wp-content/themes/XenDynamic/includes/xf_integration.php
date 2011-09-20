@@ -13,30 +13,41 @@
  * This file will hold all code and functions for hooking the theme in with XF
  */
 
-//******************************************************************************
-// Pull instantiate and pull the template from the Xenforo system
-//******************************************************************************
+class XFIntegration {
+    
+    private $localLoaded = false;
+    
+    private $forumPath = "/community";
 
-if (!is_admin()) {
-    $XenDynamic_container = true;
-    $startTime = microtime(true);
-    $XenDynamic_indexFile = "../../../.." . getThemeOption("xenforo_path");
-    $fileDir = dirname(__FILE__) . "/{$XenDynamic_indexFile}";
-//    $fileDir = ABSPATH . getThemeOption("xenforo_path");
-//	$fileDir = dirname(__FILE__) . "/../../../.." . getThemeOption("xenforo_path");
-    if (!class_exists("XenForo_Autoloader")) {
-        require($fileDir . '/library/XenForo/Autoloader.php');
-        XenForo_Autoloader::getInstance()->setupAutoloader($fileDir . '/library');
-        XenForo_Application::initialize($fileDir . '/library', $fileDir);
-        XenForo_Application::set('page_start_time', $startTime);
-        XenForo_Application::disablePhpErrorHandler();
-        error_reporting(E_ALL ^ E_NOTICE ^ E_USER_NOTICE ^ E_WARNING);
+    public function initialize($inputPath) {
+        $this->forumPath = $inputPath;
+        $XenDynamic_container = true;
+        $startTime = microtime(true);
+        $fileDir = ABSPATH . $this->forumPath;
+        $autoloaderPath = $fileDir . '/library/XenForo/Autoloader.php';
+        if (file_exists($autoloaderPath)) {
+            if (!class_exists("XenForo_Autoloader")) {
+                $this->localLoaded = true;
+                require($autoloaderPath);
+                XenForo_Autoloader::getInstance()->setupAutoloader($fileDir . '/library');
+                XenForo_Application::initialize($fileDir . '/library', $fileDir);
+                XenForo_Application::set('page_start_time', $startTime);
+                XenForo_Application::disablePhpErrorHandler();
+                error_reporting(E_ALL ^ E_NOTICE ^ E_USER_NOTICE ^ E_WARNING);
+            }
+        }
     }
-    ob_start();
-    $XenDynamic_fc = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
-    $xenforoOutput = $XenDynamic_fc->runXenDynamic(ob_get_clean());
-    global $templateParts;
-    $templateParts = getTemplateParts($xenforoOutput, getThemeOption("xenforo_path"));
+    
+    public function isLocalLoaded() {
+        return $this->localLoaded;
+    }
+    
+    public function getTemplate() {
+        ob_start();
+        $controller = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
+        return $controller->runXenDynamic(ob_get_clean());
+    }
+
 }
 
 //******************************************************************************
