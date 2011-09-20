@@ -23,7 +23,7 @@ get_header();
 <?php
 addScript("aside", "remove", "");
 addScript("div.mainContent", "css", array("margin-right", "0px"));
-global $XF;
-echo $XF->displayXFTemplate();
+global $XD;
+echo $XD->displayXFTemplate();
 get_footer();
 ?>

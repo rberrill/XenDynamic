@@ -29,7 +29,7 @@ get_header();
 <?php get_sidebar(); ?>
 
 <?php
-global $XF;
-echo $XF->displayXFTemplate();
+global $XD;
+echo $XD->displayXFTemplate();
 get_footer();
 ?>

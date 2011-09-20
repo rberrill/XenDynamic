@@ -20,7 +20,6 @@ class XFIntegration {
 
     public function initialize($inputPath) {
         $this->forumPath = $inputPath;
-        $XenDynamic_container = true;
         $startTime = microtime(true);
         $fileDir = ABSPATH . $this->forumPath;
         $autoloaderPath = $fileDir . '/library/XenForo/Autoloader.php';
@@ -39,12 +38,6 @@ class XFIntegration {
 
     public function isLocalLoaded() {
         return $this->localLoaded;
-    }
-
-    public function getTemplate() {
-        ob_start();
-        $controller = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
-        return $controller->runXenDynamic(ob_get_clean());
     }
 
     public function getTemplateParts($buffer) {

@@ -18,14 +18,16 @@ require_once("includes/xf_integration.php");
 require_once("includes/breadcrumb.php");
 
 if(!is_admin()) {
-    global $XF;
-    $XF = new XFIntegration();
-    $XF->initialize(getThemeOption("xenforo_path"));
+    global $XD;
+    $XD = new XFIntegration();
 
-    global $completeTemplate;
-    $completeTemplate = $XF->getTemplate();
+    $XD->initialize(getThemeOption("xenforo_path"));
+
+    $XenDynamic_fc = new RCBD_XenDynamic_FrontController(new XenForo_Dependencies_Public());
+    $xenforoOutput = $XenDynamic_fc->runXenDynamic();
+
     global $templateParts;
-    $templateParts = $XF->getTemplateParts($completeTemplate);
+    $templateParts = $XD->getTemplateParts($xenforoOutput);
 }
 
 //******************************************************************************
