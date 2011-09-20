@@ -3,7 +3,7 @@
  * Theme Name: XenDynamic
  * Theme URI: http://www.rcbdesigns.net
  * Description: The Dynamic XenForo v1.0.4 Theme For WordPress 
- * Version: 0.2.0
+ * Version: 0.1.0
  * Author: Rich Berrill
  * Author URI: http://www.rcbdesigns.net
  * Tags: xenforo
@@ -27,7 +27,6 @@ get_header();
 <?php get_sidebar(); ?>
 
 <?php
-global $XD;
-echo $XD->displayXFTemplate();
+displayXFTemplate();
 get_footer();
 ?>
